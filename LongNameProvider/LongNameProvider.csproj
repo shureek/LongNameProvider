@@ -39,9 +39,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IO\File.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Provider.cs" />
+    <Compile Include="Service.cs" />
+    <Compile Include="FileSystem.cs" />
+    <Compile Include="SystemErrorCodes.cs" />
+    <Compile Include="Win32Native.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
