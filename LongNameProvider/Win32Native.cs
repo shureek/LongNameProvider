@@ -25,6 +25,9 @@ namespace LongNameProvider.Win32
         [DllImport("kernel32.dll", BestFitMapping = false, CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern bool FindNextFile(SafeFindHandle findHandle, [MarshalAs(UnmanagedType.LPStruct), In, Out]FindData data);
 
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true, BestFitMapping = false)]
+        public static extern SafeFindHandle FindFirstFileEx(string fileName, FIndexInfoLevels infoLevel, [In, Out]Win32.FindData fineFileData, FIndexSearchOps searchOp, IntPtr searchFilter, SearchAdditionalFlags flags);
+
         [DllImport("kernel32.dll")]
         public static extern bool FindClose(IntPtr handle);
     }
@@ -97,6 +100,47 @@ namespace LongNameProvider.Win32
             get { return DateTime.FromFileTime(LastWriteFileTime); }
             set { LastWriteFileTime = value.ToFileTime(); }
         }
+    }
+
+    enum FIndexInfoLevels
+    {
+        /// <summary>
+        /// Standard set of attribute information.
+        /// </summary>
+        Standard,
+        /// <summary>
+        /// Does not query short file names.
+        /// </summary>
+        Basic
+    }
+
+    enum FIndexSearchOps
+    {
+        /// <summary>
+        /// The search for a file that matches a specified file name.
+        /// </summary>
+        NameMatch,
+        /// <summary>
+        /// If the file system supports directory filtering, the functions searches for directories only.
+        /// </summary>
+        /// <remarks>
+        /// The searchFilter parameter must be <value>null</value> when this search value is used.
+        /// </remarks>
+        LimitToDirectories
+    }
+
+    [Flags]
+    enum SearchAdditionalFlags
+    {
+        None = 0,
+        /// <summary>
+        /// Searches are case-sensitive.
+        /// </summary>
+        CaseSensitive = 1,
+        /// <summary>
+        /// Uses larger buffer for directory queries, which can increase performance of the find operation.
+        /// </summary>
+        LargeFetch = 2
     }
 
     sealed class SafeFindHandle : Microsoft.Win32.SafeHandles.SafeHandleZeroOrMinusOneIsInvalid
